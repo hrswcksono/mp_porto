@@ -194,7 +194,7 @@ export default function ReportsPage() {
                     className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Semua Pengguna</option>
-                    {users?.data?.data?.map((user: User) => (
+                    {users?.data?.map((user: any) => (
                       <option key={user.id} value={user.id}>
                         {user.name}
                       </option>

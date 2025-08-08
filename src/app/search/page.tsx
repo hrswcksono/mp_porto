@@ -287,7 +287,7 @@ export default function SearchPage() {
 
                 {debouncedQuery && searchResults && (
                   <p className="text-sm text-gray-500">
-                    {searchResults.data?.total || 0} hasil ditemukan
+                    {(searchResults as any)?.data?.total || 0} hasil ditemukan
                   </p>
                 )}
               </div>

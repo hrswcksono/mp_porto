@@ -193,7 +193,7 @@ export default function TeamsPage() {
       {(showCreateModal || editingTeam) && (
         <TeamModal
           team={editingTeam}
-          users={users?.data?.data || []}
+          users={(users as any)?.data?.data || users || []}
           onClose={() => {
             setShowCreateModal(false);
             setEditingTeam(null);

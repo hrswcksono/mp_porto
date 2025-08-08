@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { userApi } from '@/lib/api';
 import MainLayout from '@/components/layout/MainLayout';
@@ -61,18 +61,19 @@ export default function SettingsPage() {
   const { data: user, isLoading } = useQuery({
     queryKey: ['user', 'profile'],
     queryFn: () => userApi.getProfile(),
-    onSuccess: (data) => {
-      if (data?.data) {
-        setProfileForm({
-          name: data.data.name || '',
-          email: data.data.email || '',
-          phone: data.data.phone || '',
-          department: data.data.department || '',
-          bio: data.data.bio || '',
-        });
-      }
-    },
   });
+
+  useEffect(() => {
+    if (user?.data) {
+      setProfileForm({
+        name: user.data.name || '',
+        email: user.data.email || '',
+        phone: user.data.phone || '',
+        department: (user.data as any).department || '',
+        bio: (user.data as any).bio || '',
+      });
+    }
+  }, [user]);
 
   const updateProfileMutation = useMutation({
     mutationFn: (data: any) => userApi.updateProfile(data),
@@ -242,11 +243,11 @@ export default function SettingsPage() {
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    disabled={updateProfileMutation.isLoading}
+                    disabled={updateProfileMutation.isPending}
                     className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
                   >
                     <SaveIcon className="h-5 w-5 mr-2" />
-                    {updateProfileMutation.isLoading ? 'Menyimpan...' : 'Simpan Perubahan'}
+                    {updateProfileMutation.isPending ? 'Menyimpan...' : 'Simpan Perubahan'}
                   </button>
                 </div>
               </form>
@@ -341,11 +342,11 @@ export default function SettingsPage() {
                 <div className="flex justify-end">
                   <button
                     type="submit"
-                    disabled={changePasswordMutation.isLoading}
+                    disabled={changePasswordMutation.isPending}
                     className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
                   >
                     <LockIcon className="h-5 w-5 mr-2" />
-                    {changePasswordMutation.isLoading ? 'Mengubah...' : 'Ubah Password'}
+                    {changePasswordMutation.isPending ? 'Mengubah...' : 'Ubah Password'}
                   </button>
                 </div>
               </form>
